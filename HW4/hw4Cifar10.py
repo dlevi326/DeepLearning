@@ -1,13 +1,17 @@
 # David Levi
 # Project 3
 
+# Used a youtube tutorial to handle the Cifar loading as well as a few of the hyperparamers (https://www.youtube.com/watch?v=7TlkKd4vf4o).
+# I also combined this with my project from last week, yielding around 65% accuracy.  Obviously not great, but
+# it was definitely harder to do some trial and error due to very long training times which, due to the jewish holidays
+# I didnt really have time for.
+
 import os
 import pickle
 import tensorflow as tf
 import numpy as np 
 from tqdm import tqdm
 
-from keras.datasets import mnist
 from keras.utils import to_categorical
 
 
@@ -51,14 +55,7 @@ def one_hot(vec, vals=NUM_CLASSES):
 	out = np.zeros((n,vals))
 	out[range(n), vec] = 1
 	return out
-
-def display_cifar(images,size):
-	n = len(images)
-	plt.figure()
-	plt.gca().set_axis_off()
-	im = np.vstack([np.hstack([images[np.random.choice(n)] for i in range(size)]) for i in range(size)])
-	plt.imshow(im)
-	plt.show()
+# END OF TUTORIAL HELP
 
 cifar = CifarData()
 
@@ -153,9 +150,16 @@ def train(x):
 			print('Epoch', epoch, 'completed out of',NUM_EPOCHS,'loss:',currLoss,'val_Loss:',valLoss)
 
 		x_test,y_test = cifar.test.get_batch(10000)
-		correct = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
+
+		correct = tf.nn.in_top_k(predictions=pred,targets=tf.argmax(y,1),k=1)
+		correct5 = tf.nn.in_top_k(predictions=pred,targets=tf.argmax(y,1),k=5)
 		accuracy = tf.reduce_mean(tf.cast(correct, 'float'))
-		print('Accuracy:',accuracy.eval({x:x_test, y:y_test}))
+		accuracy5 = tf.reduce_mean(tf.cast(correct5, 'float'))
+		#accuracy = correct
+
+		#accuracy = tf.metrics.mean(tf.nn.in_top_k(predictions=pred, targets=yN, k=5))
+		print('Top Accuracy: ',accuracy.eval({x:x_test, y:y_test}))
+		print('Top 5 Accuracy:',accuracy5.eval({x:x_test, y:y_test}))
 
 train(x)
 
