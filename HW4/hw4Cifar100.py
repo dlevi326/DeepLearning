@@ -1,17 +1,13 @@
 # David Levi
-# Project 3
+# Project 4
+# Cifar 100 dataset
 
-# Used a youtube tutorial to handle the Cifar loading as well as a few of the hyperparamers (https://www.youtube.com/watch?v=7TlkKd4vf4o).
-# I also combined this with my project from last week, yielding around 65% accuracy.  Obviously not great, but
-# it was definitely harder to do some trial and error due to very long training times which, due to the jewish holidays
-# I didnt really have time for.
 
 import os
 import pickle
 import tensorflow as tf
 import numpy as np 
 from tqdm import tqdm
-import matplotlib.pyplot as plt
 
 from keras.utils import to_categorical
 
@@ -44,7 +40,6 @@ class CifarData(object):
 
 
 PATH = "cifar100"
-NUM_CLASSES = 10
 
 def unpickle(file):
 	with open(os.path.join(PATH,file), 'rb') as fo:
@@ -89,8 +84,8 @@ def cnn(x):
 	}
 
 	norm = 0
-	#for w in w_dict:
-		#norm+=tf.pow(tf.norm(w_dict[w]),2)
+	for w in w_dict:
+		norm+=tf.pow(tf.norm(w_dict[w]),2)
 
 	b_dict = {
 			'b_conv1':tf.Variable(tf.constant(0.1,shape=[32])),

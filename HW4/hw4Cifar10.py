@@ -1,10 +1,13 @@
 # David Levi
-# Project 3
+# Project 4
+# Cifar 10 dataset
 
 # Used a youtube tutorial to handle the Cifar loading as well as a few of the hyperparamers (https://www.youtube.com/watch?v=7TlkKd4vf4o).
 # I also combined this with my project from last week, yielding around 65% accuracy.  Obviously not great, but
 # it was definitely harder to do some trial and error due to very long training times which, due to the jewish holidays
 # I didnt really have time for.
+
+# I tried a couple of different formats but this original one actually worked the best.
 
 import os
 import pickle
@@ -85,8 +88,8 @@ def cnn(x):
 	}
 
 	norm = 0
-	#for w in w_dict:
-		#norm+=tf.pow(tf.norm(w_dict[w]),2)
+	for w in w_dict:
+		norm+=tf.pow(tf.norm(w_dict[w]),2)
 
 	b_dict = {
 			'b_conv1':tf.Variable(tf.constant(0.1,shape=[32])),
